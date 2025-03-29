@@ -105,15 +105,29 @@ int main(void)
 
 	pR5Base = (volatile void *) SHARED_MEM_BTCM_START;
 	uint32_t currentBrightColor = 0xff000000;
-    uint32_t currentColor =0xf0000000;
+    uint32_t currentColor =0x0f000000;
 	while (true) {
 		gpio_pin_set_dt(&neopixel, 0);
 		DELAY_NS(NEO_RESET_NS);
 	
 		//X_LOCATION_OFFSET: 0 - 9 (top - bottom); 10 is all ON
 		int xLoc = MEM_UINT32(pR5Base + X_LOCATION_OFFSET) - 1 ; // (Minus 1 here to match the LED array index)
-		// int greenColor = MEM_UINT32(pR5Base + IS_BUTTON_PRESSED_OFFSET) -1
+		//COLOR_OFFSET: 0 - 2 (0:Green, 1:Red, 2:Blue)
+		int colorCode = MEM_UINT32(pR5Base + COLOR_OFFSET);
 
+		// Changing Color
+		if (colorCode == 0) {
+			currentBrightColor = 0xff000000;
+			currentColor =0x0f000000;
+		} else if (colorCode == 1) {
+			currentBrightColor = 0x00ff0000;
+			currentColor =0x000f0000;
+		} else {
+			currentBrightColor = 0x0000ff00;
+			currentColor =0x00000f00;
+		}
+
+	
 		if(xLoc == 9){
 			for(int j = (NEO_NUM_LEDS - 1); j >= 0; j--) {
 				for(int i = 31; i >= 0; i--) {

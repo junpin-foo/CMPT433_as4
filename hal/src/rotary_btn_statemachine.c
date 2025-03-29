@@ -17,7 +17,7 @@ static pthread_t stateMachineThread;
 static bool isInitialized = false;
 
 struct GpioLine* s_lineBtn = NULL;
-static atomic_int counter = 1;
+static atomic_int counter = 0;
 static bool stateMachineRunning = false;
 
 //DEBOUNCE

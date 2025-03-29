@@ -6,6 +6,7 @@
 #include "hal/gpio.h"
 #include "hal/joystick.h"
 #include "hal/lcd.h"
+#include "hal/rotary_btn_statemachine.h"
 #include "hal/accelerometer.h"
 #include "sleep_timer_helper.h"
 #include <fcntl.h>
@@ -14,6 +15,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <sys/mman.h>
+#include <math.h>
 
 #include "sharedDataLayout.h"
 
@@ -62,44 +64,67 @@ int main(void)
 	Ic2_initialize();
 	Gpio_initialize();
 	Joystick_initialize();
+    BtnStateMachine_init();
+    Accelerometer_initialize();
+
 
 	volatile uint8_t *pR5Base = getR5MmapAddr();
-    int count = 0;
-	while(true){
-		if(Joystick_isButtonPressed()){
-            count = count % 9 + 1;
-			printf("Button Pressed\n");
-		}
-		MEM_UINT32(pR5Base + X_LOCATION_OFFSET)  = count;
-		sleepForMs(100);
-	}
+    // int count = 0;
+    // int color_count = 0;
+	// while(true){
+	// 	if(Joystick_isButtonPressed()){
+    //         count = (count + 1) % 11;
+	// 		printf("Button Pressed, %d\n", count);
+	// 	}
+    //     if(BtnStateMachine_getValue() != 0){
+    //         color_count = (color_count + 1) % 3;
+	// 		printf("Rotary Button Pressed, %d\n", color_count);
+    //         BtnStateMachine_setValue(0);
+	// 	}
+	// 	MEM_UINT32(pR5Base + X_LOCATION_OFFSET)  = count;
+    //     MEM_UINT32(pR5Base + COLOR_OFFSET)  = color_count;
+	// 	sleepForMs(100);
+	// }
 
-    // Accelerometer_initialize();
     // GameState currentGame = randomGameState();
-    // // Tilt up: x -> -1.0
-    // // Tilt down: x -> 1.0
-    // // Lean right: y -> -1
-    // // Lean left : y -> 1
-    // while(true){
-    //     AccelerometerData data =  Accelerometer_getReading();
-    //     printf("X: %.1f, Y: %.1f\n", data.x, data.y);
-    //     if(data.x > currentGame.x) { //User has to point up (point 0.5, current 0.7 -> tilt up )
-    //         //
-    //     } else if (data.x < currentGame.x){ //User has to point down 
-    //         //
-    //     } else { // up/down correct
+    GameState currentGame = {0.0, 0.0};
+    // Tilt up: x -> -1.0
+    // Tilt down: x -> 1.0
+    // Lean right: y -> -1
+    // Lean left : y -> 1
+    while(true){
+        AccelerometerData data =  Accelerometer_getReading();
+        // printf("X: %.1f, Y: %.1f\n", data.x, data.y);
+        float aimError = fabs(data.x - currentGame.x);
+        if((data.x > currentGame.x) && (aimError > 0.1)) { //User has to point up (tilt up) Aiming way below the point
+            int xLoc = (aimError >= 1.0) ? 0 : (4 - (int)(aimError * 4)); // Scale from 0 to 4 (0 is worse, 4 is best)
             
-    //     }
+            printf("Point UP: Error: %d, xLoc: %d\n", (int)(aimError * 4), xLoc);
+            MEM_UINT32(pR5Base + X_LOCATION_OFFSET) = xLoc;
 
-    //     if (data.y > currentGame.y) { //User has to lean right
-    //         //
-    //     } else if (data.y < currentGame.y) { //User has to lean left
-    //         //
-    //     } else { // left/right correct
+        } else if ((data.x < currentGame.x) && (aimError > 0.1)){ //User has to point down (tilt down) . Aiming way above the point
+            int xLoc = (aimError >= 1.0) ? 6 : (6 + (int)(aimError * 4)); // Scale from 6 (best) to 9 (worst)
 
-    //     }
+            printf("Point DOWN: Error: %d, xLoc: %d\n", (int)(aimError * 4), xLoc);
+            MEM_UINT32(pR5Base + X_LOCATION_OFFSET) = xLoc;
 
+        } else { // up/down correct
+            MEM_UINT32(pR5Base + X_LOCATION_OFFSET)  = 10;
+        }
 
+        float aimErrorY = fabs(data.y - currentGame.y);
+        if ((data.y > currentGame.y) && (aimErrorY > 0.1)) { //User has to lean right. (Point on the right)
+            MEM_UINT32(pR5Base + COLOR_OFFSET)  = 0;
+            //
+        } else if ((data.y < currentGame.y) && (aimErrorY > 0.1)) { //User has to lean left. (Point on the left)
+            MEM_UINT32(pR5Base + COLOR_OFFSET)  = 1;
+            //
+        } else { // left/right correct
+            MEM_UINT32(pR5Base + COLOR_OFFSET)  = 2;
+
+        }
+        sleepForMs(200);
+    }
     //     sleepForMs(200);
     // }
 }

@@ -68,6 +68,7 @@ app/CMakeFiles/finddot.dir/src/main.c.o: \
  /usr/aarch64-linux-gnu/include/bits/types/struct_FILE.h \
  /usr/aarch64-linux-gnu/include/bits/stdio_lim.h \
  /home/junpinfoo/cmpt433/work/as4/hal/include/hal/lcd.h \
+ /home/junpinfoo/cmpt433/work/as4/hal/include/hal/rotary_btn_statemachine.h \
  /home/junpinfoo/cmpt433/work/as4/hal/include/hal/accelerometer.h \
  /home/junpinfoo/cmpt433/work/as4/app/include/sleep_timer_helper.h \
  /usr/aarch64-linux-gnu/include/fcntl.h \
@@ -88,4 +89,12 @@ app/CMakeFiles/finddot.dir/src/main.c.o: \
  /usr/aarch64-linux-gnu/include/bits/mman-linux.h \
  /usr/aarch64-linux-gnu/include/bits/mman-shared.h \
  /usr/aarch64-linux-gnu/include/bits/mman_ext.h \
+ /usr/aarch64-linux-gnu/include/math.h \
+ /usr/aarch64-linux-gnu/include/bits/math-vector.h \
+ /usr/aarch64-linux-gnu/include/bits/libm-simd-decl-stubs.h \
+ /usr/aarch64-linux-gnu/include/bits/flt-eval-method.h \
+ /usr/aarch64-linux-gnu/include/bits/fp-logb.h \
+ /usr/aarch64-linux-gnu/include/bits/fp-fast.h \
+ /usr/aarch64-linux-gnu/include/bits/mathcalls-helper-functions.h \
+ /usr/aarch64-linux-gnu/include/bits/mathcalls.h \
  /home/junpinfoo/cmpt433/work/as4/app/include/sharedDataLayout.h
