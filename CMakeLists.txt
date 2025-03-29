@@ -23,5 +23,3 @@ add_subdirectory(hal)
 add_subdirectory(app)
 add_subdirectory(lgpio)
 add_subdirectory(lcd)
-
-find_package(Zephyr REQUIRED HINTS $ENV{ZEPHYR_BASE})

@@ -1,0 +1,2 @@
+/home/junpinfoo/zephyr-sdk-0.17.0/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc liblib__posix__options.a CMakeFiles/lib__posix__options.dir/home/junpinfoo/zephyrproject/zephyr/misc/empty_file.c.obj
+/home/junpinfoo/zephyr-sdk-0.17.0/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib liblib__posix__options.a

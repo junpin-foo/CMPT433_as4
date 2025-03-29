@@ -1,191 +1,67 @@
-// NeoPixel Driver Sample
-//
-// Based off the Zephyr blinky sample application.
-// - Designed to be compiled for BeagleY-AI's MCU R5
-//   (because the custom hardware uses pins that are mapped to the MCU domain)
-
+/* main.c
+* 
+*
+*/
+#include "hal/i2c.h"
+#include "hal/gpio.h"
+#include "hal/joystick.h"
+#include "hal/lcd.h"
+#include "hal/accelerometer.h"
+#include "sleep_timer_helper.h"
+#include <fcntl.h>
+#include <unistd.h>
 #include <stdio.h>
+#include <stdbool.h>
 #include <stdlib.h>
-#include <zephyr/kernel.h>
-#include <zephyr/drivers/gpio.h>
-#include <string.h>
+#include <sys/mman.h>
 
-#define NEO_NUM_LEDS          8   // # LEDs in our string
+#include "sharedDataLayout.h"
 
-// NeoPixel Timing
-// NEO_<one/zero>_<on/off>_NS
-// (These times are what the hardware needs; the delays below are hand-tuned to give these).
-#define NEO_ONE_ON_NS       700   // Stay on 700ns
-#define NEO_ONE_OFF_NS      600   // (was 800)
-#define NEO_ZERO_ON_NS      350
-#define NEO_ZERO_OFF_NS     800   // (Was 600)
-#define NEO_RESET_NS      60000   // Must be at least 50us, use 60us
 
-// Delay time includes 1 GPIO set action.
-volatile int junk_delay = 0;
-#define DELAY_350_NS() {}
-#define DELAY_600_NS() {for (junk_delay=0; junk_delay<9 ;junk_delay++);}
-#define DELAY_700_NS() {for (junk_delay=0; junk_delay<16 ;junk_delay++);}
-#define DELAY_800_NS() {for (junk_delay=0; junk_delay<23 ;junk_delay++);}
+// General R5 Memomry Sharing Routine
+// ----------------------------------------------------------------
+#define ATCM_ADDR     0x79000000  // MCU ATCM (p59 TRM)
+#define BTCM_ADDR     0x79020000  // MCU BTCM (p59 TRM)
+#define MEM_LENGTH    0x8000
 
-#define DELAY_NS(ns) do {int target = k_cycle_get_32() + k_ns_to_cyc_near32(ns); \
-	while(k_cycle_get_32() < target) ; } while(false)
-
-#define NEO_DELAY_ONE_ON()     DELAY_700_NS()
-#define NEO_DELAY_ONE_OFF()    DELAY_600_NS()
-#define NEO_DELAY_ZERO_ON()    DELAY_350_NS()
-#define NEO_DELAY_ZERO_OFF()   DELAY_800_NS()
-#define NEO_DELAY_RESET()      {DELAY_NS(NEO_RESET_NS);}
-
-// Device tree nodes for pin aliases
-#define LED0_NODE DT_ALIAS(led0)
-#define BTN0_NODE DT_ALIAS(btn0)
-#define NEOPIXEL_NODE DT_ALIAS(neopixel)
-
-static const struct gpio_dt_spec led = GPIO_DT_SPEC_GET(LED0_NODE, gpios);
-static const struct gpio_dt_spec btn = GPIO_DT_SPEC_GET(BTN0_NODE, gpios);
-static const struct gpio_dt_spec neopixel = GPIO_DT_SPEC_GET(NEOPIXEL_NODE, gpios);
-
-static void initialize_gpio(const struct gpio_dt_spec *pPin, int direction) 
+// Return the address of the base address of the ATCM memory region for the R5-MCU
+volatile void* getR5MmapAddr(void)
 {
-	if (!gpio_is_ready_dt(pPin)) {
-		printf("ERROR: GPIO pin not ready read; direction %d\n", direction);
-		exit(EXIT_FAILURE);
-	}
+    // Access /dev/mem to gain access to physical memory (for memory-mapped devices/specialmemory)
+    int fd = open("/dev/mem", O_RDWR | O_SYNC);
+    if (fd == -1) {
+        perror("ERROR: could not open /dev/mem; Did you run with sudo?");
+        exit(EXIT_FAILURE);
+    }
 
-	int ret = gpio_pin_configure_dt(pPin, direction);
-	if (ret < 0) {
-		printf("ERROR: GPIO Pin Configure issue; direction %d\n", direction);
-		exit(EXIT_FAILURE);
-	}
+    // Inside main memory (fd), access the part at offset BTCM_ADDR:
+    // (Get points to start of R5 memory after it's memory mapped)
+    volatile void* pR5Base = mmap(0, MEM_LENGTH, PROT_READ | PROT_WRITE, MAP_SHARED, fd, BTCM_ADDR);
+    if (pR5Base == MAP_FAILED) {
+        perror("ERROR: could not map memory");
+        exit(EXIT_FAILURE);
+    }
+    close(fd);
+
+    return pR5Base;
 }
 
 int main(void)
 {
-	printf("Hello World! %s\n", CONFIG_BOARD_TARGET);
+	Ic2_initialize();
+	Gpio_initialize();
+	Joystick_initialize();
 
-	initialize_gpio(&led, GPIO_OUTPUT_ACTIVE);
-	initialize_gpio(&btn, GPIO_INPUT);
-	initialize_gpio(&neopixel, GPIO_OUTPUT_ACTIVE);
+	volatile uint8_t *pR5Base = getR5MmapAddr();
 
-	// uint32_t bright_green = 0xff000000;
-	// uint32_t green = 0xff000000;
-	// uint32_t off = 0xff000000;
-	// COLOURS
-    // - 1st element in array is 1st (bottom) on LED strip; last element is last on strip (top)
-    // - Bits: {Green/8 bits} {Red/8 bits} {Blue/8 bits} {White/8 bits}
-    uint32_t color[NEO_NUM_LEDS] = {
-        0x0f000000, // Green
-        0x000f0000, // Red
-        0x00000f00, // Blue
-        0x0000000f, // White
-        0x0f0f0f00, // White (via RGB)
-        0x0f0f0000, // Yellow
-        0x000f0f00, // Purple
-        0x0f000f00, // Teal
-
-        // Try these; they are birght! 
-        // (You'll need to comment out some of the above)
-        // 0xff000000, // Green Bright
-        // 0x00ff0000, // Red Bright
-        // 0x0000ff00, // Blue Bright
-        // 0xffffff00, // White
-        // 0xff0000ff, // Green Bright w/ Bright White
-        // 0x00ff00ff, // Red Bright w/ Bright White
-        // 0x0000ffff, // Blue Bright w/ Bright White
-        // 0xffffffff, // White w/ Bright White
-
-		// 0x00000000, // Green Bright
-        // 0x00000000, // Red Bright
-        // 0x00000000, // Blue Bright
-        // 0x00000000, // White
-        // 0x00000000, // Green Bright w/ Bright White
-        // 0x00000000, // Red Bright w/ Bright White
-        // 0x00000000, // Blue Bright w/ Bright White
-        // 0x00000000, // White w/ Bright White
-    }; 
-	
-	uint32_t color2[NEO_NUM_LEDS] = {
-		// Normal
-        // 0x0f000000, // Green
-        // 0x000f0000, // Red
-        // 0x00000f00, // Blue
-        // 0x0000000f, // White
-        // 0x0f0f0f00, // White (via RGB)
-        // 0x0f0f0000, // Yellow
-        // 0x000f0f00, // Purple
-        // 0x0f000f00, // Teal
-
-        // Try these; they are birght! 
-        // (You'll need to comment out some of the above)
-        // 0xff000000, // Green Bright
-        // 0x00ff0000, // Red Bright
-        // 0x0000ff00, // Blue Bright
-        // 0xffffff00, // White
-        // 0xff0000ff, // Green Bright w/ Bright White
-        // 0x00ff00ff, // Red Bright w/ Bright White
-        // 0x0000ffff, // Blue Bright w/ Bright White
-        // 0xffffffff, // White w/ Bright White
-
-		// OFF
-		0x00000000, // Green Bright
-        0x00000000, // Red Bright
-        0x00000000, // Blue Bright
-        0x00000000, // White
-        0x00000000, // Green Bright w/ Bright White
-        0x00000000, // Red Bright w/ Bright White
-        0x00000000, // Blue Bright w/ Bright White
-        0x00000000, // White w/ Bright White
-    };    
-
-	// int i = 1;
-	while (true) {
-		gpio_pin_set_dt(&neopixel, 0);
-		DELAY_NS(NEO_RESET_NS);
-		for(int j = 0; j < NEO_NUM_LEDS; j++) {
-			for(int i = 31; i >= 0; i--) {
-				if(color[j] & ((uint32_t)0x1 << i)) {
-					gpio_pin_set_dt(&neopixel, 1);
-					NEO_DELAY_ONE_ON();
-					gpio_pin_set_dt(&neopixel, 0);
-					NEO_DELAY_ONE_OFF();
-				} else {
-					gpio_pin_set_dt(&neopixel, 1);
-					NEO_DELAY_ZERO_ON();
-					gpio_pin_set_dt(&neopixel, 0);
-					NEO_DELAY_ZERO_OFF();
-				}
-			}
+	while(true){
+		if(Joystick_isButtonPressed()){
+			MEM_UINT32(pR5Base + IS_BUTTON_PRESSED_OFFSET)  = 1;
+			printf("Button Pressed\n");
 		}
-
-		gpio_pin_set_dt(&neopixel, 0);
-		NEO_DELAY_RESET();
-		// Keep looping in case we plug in NeoPixel later
-		k_busy_wait(500000);
-
-		gpio_pin_set_dt(&neopixel, 0);
-		DELAY_NS(NEO_RESET_NS);
-
-		for(int j = 0; j < NEO_NUM_LEDS; j++) {
-			for(int i = 31; i >= 0; i--) {
-				if(color2[j] & ((uint32_t)0x1 << i)) {
-					gpio_pin_set_dt(&neopixel, 1);
-					NEO_DELAY_ONE_ON();
-					gpio_pin_set_dt(&neopixel, 0);
-					NEO_DELAY_ONE_OFF();
-				} else {
-					gpio_pin_set_dt(&neopixel, 1);
-					NEO_DELAY_ZERO_ON();
-					gpio_pin_set_dt(&neopixel, 0);
-					NEO_DELAY_ZERO_OFF();
-				}
-			}
+		else {
+			MEM_UINT32(pR5Base + IS_BUTTON_PRESSED_OFFSET)  = 0;
 		}
-
-		gpio_pin_set_dt(&neopixel, 0);
-		NEO_DELAY_RESET();
-		// Keep looping in case we plug in NeoPixel later
-		k_busy_wait(500000);
+		sleepForMs(100);
 	}
-	return 0;
 }

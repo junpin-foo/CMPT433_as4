@@ -1,0 +1,14 @@
+/home/junpinfoo/cmpt433/work/as4/build/CMakeFiles/edit_cache.dir
+/home/junpinfoo/cmpt433/work/as4/build/CMakeFiles/rebuild_cache.dir
+/home/junpinfoo/cmpt433/work/as4/build/hal/CMakeFiles/hal.dir
+/home/junpinfoo/cmpt433/work/as4/build/hal/CMakeFiles/edit_cache.dir
+/home/junpinfoo/cmpt433/work/as4/build/hal/CMakeFiles/rebuild_cache.dir
+/home/junpinfoo/cmpt433/work/as4/build/app/CMakeFiles/finddot.dir
+/home/junpinfoo/cmpt433/work/as4/build/app/CMakeFiles/edit_cache.dir
+/home/junpinfoo/cmpt433/work/as4/build/app/CMakeFiles/rebuild_cache.dir
+/home/junpinfoo/cmpt433/work/as4/build/lgpio/CMakeFiles/lgpio.dir
+/home/junpinfoo/cmpt433/work/as4/build/lgpio/CMakeFiles/edit_cache.dir
+/home/junpinfoo/cmpt433/work/as4/build/lgpio/CMakeFiles/rebuild_cache.dir
+/home/junpinfoo/cmpt433/work/as4/build/lcd/CMakeFiles/lcd.dir
+/home/junpinfoo/cmpt433/work/as4/build/lcd/CMakeFiles/edit_cache.dir
+/home/junpinfoo/cmpt433/work/as4/build/lcd/CMakeFiles/rebuild_cache.dir

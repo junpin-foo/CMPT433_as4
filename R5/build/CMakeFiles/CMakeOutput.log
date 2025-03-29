@@ -1,0 +1,97 @@
+The target system is: Generic - 4.1.99 - arm
+The host system is: Linux - 6.1.0-30-amd64 - x86_64
+Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+Compiler: /home/junpinfoo/zephyr-sdk-0.17.0/arm-zephyr-eabi/bin/arm-zephyr-eabi-gcc 
+Build flags: 
+Id flags: -c 
+
+The output was:
+0
+
+
+Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CMakeCCompilerId.o"
+
+The C compiler identification is GNU, found in "/home/junpinfoo/cmpt433/work/as4/R5/build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.o"
+
+Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+Compiler: /home/junpinfoo/zephyr-sdk-0.17.0/arm-zephyr-eabi/bin/arm-zephyr-eabi-g++ 
+Build flags: 
+Id flags: -c 
+
+The output was:
+0
+
+
+Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CMakeCXXCompilerId.o"
+
+The CXX compiler identification is GNU, found in "/home/junpinfoo/cmpt433/work/as4/R5/build/CMakeFiles/3.25.1/CompilerIdCXX/CMakeCXXCompilerId.o"
+
+Checking whether the ASM compiler is GNU using "--version" matched "(GNU assembler)|(GCC)|(Free Software Foundation)":
+arm-zephyr-eabi-gcc (Zephyr SDK 0.17.0) 12.2.0
+Copyright (C) 2022 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+Performing C SOURCE FILE Test check_fmacro_prefix_map__home_junpinfoo_cmpt433_work_as4_R5_CMAKE_SOURCE_DIR_C__nostartfiles__nostdlib__isystem___home_junpinfoo_zephyr_sdk_0_17_0_arm_zephyr_eabi_bin____lib_gcc_arm_zephyr_eabi_12_2_0_include___isystem___home_junpinfoo_zephyr_sdk_0_17_0_arm_zephyr_eabi_bin____lib_gcc_arm_zephyr_eabi_12_2_0_include_fixed___Wl___unresolved_symbols_ignore_in_object_files__Wl___entry_0__fuse_ld_bfd succeeded with the following output:
+Change Dir: /home/junpinfoo/cmpt433/work/as4/R5/build/CMakeFiles/CMakeScratch/TryCompile-vGBzzO
+
+Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_5fca1/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_5fca1.dir/build.make CMakeFiles/cmTC_5fca1.dir/build
+gmake[1]: Entering directory '/home/junpinfoo/cmpt433/work/as4/R5/build/CMakeFiles/CMakeScratch/TryCompile-vGBzzO'
+Building C object CMakeFiles/cmTC_5fca1.dir/src.c.obj
+/home/junpinfoo/zephyr-sdk-0.17.0/arm-zephyr-eabi/bin/arm-zephyr-eabi-gcc -Dcheck_fmacro_prefix_map__home_junpinfoo_cmpt433_work_as4_R5_CMAKE_SOURCE_DIR_C__nostartfiles__nostdlib__isystem___home_junpinfoo_zephyr_sdk_0_17_0_arm_zephyr_eabi_bin____lib_gcc_arm_zephyr_eabi_12_2_0_include___isystem___home_junpinfoo_zephyr_sdk_0_17_0_arm_zephyr_eabi_bin____lib_gcc_arm_zephyr_eabi_12_2_0_include_fixed___Wl___unresolved_symbols_ignore_in_object_files__Wl___entry_0__fuse_ld_bfd  -nostartfiles -nostdlib -isystem "/home/junpinfoo/zephyr-sdk-0.17.0/arm-zephyr-eabi/bin/../lib/gcc/arm-zephyr-eabi/12.2.0/include" -isystem "/home/junpinfoo/zephyr-sdk-0.17.0/arm-zephyr-eabi/bin/../lib/gcc/arm-zephyr-eabi/12.2.0/include-fixed" -Wl,--unresolved-symbols=ignore-in-object-files -Wl,--entry=0 -fuse-ld=bfd   -fmacro-prefix-map=/home/junpinfoo/cmpt433/work/as4/R5=CMAKE_SOURCE_DIR -o CMakeFiles/cmTC_5fca1.dir/src.c.obj -c /home/junpinfoo/cmpt433/work/as4/R5/build/CMakeFiles/CMakeScratch/TryCompile-vGBzzO/src.c
+Linking C executable cmTC_5fca1
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_5fca1.dir/link.txt --verbose=1
+/home/junpinfoo/zephyr-sdk-0.17.0/arm-zephyr-eabi/bin/arm-zephyr-eabi-gcc  -nostartfiles -nostdlib -isystem "/home/junpinfoo/zephyr-sdk-0.17.0/arm-zephyr-eabi/bin/../lib/gcc/arm-zephyr-eabi/12.2.0/include" -isystem "/home/junpinfoo/zephyr-sdk-0.17.0/arm-zephyr-eabi/bin/../lib/gcc/arm-zephyr-eabi/12.2.0/include-fixed" -Wl,--unresolved-symbols=ignore-in-object-files -Wl,--entry=0 -fuse-ld=bfd CMakeFiles/cmTC_5fca1.dir/src.c.obj -o cmTC_5fca1 
+gmake[1]: Leaving directory '/home/junpinfoo/cmpt433/work/as4/R5/build/CMakeFiles/CMakeScratch/TryCompile-vGBzzO'
+
+
+Source file was:
+int main(void) { return 0; }
+
+Determining if files stdatomic.h exist passed with the following output:
+Change Dir: /home/junpinfoo/cmpt433/work/as4/R5/build/CMakeFiles/CMakeScratch/TryCompile-PJadNV
+
+Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_ac432/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_ac432.dir/build.make CMakeFiles/cmTC_ac432.dir/build
+gmake[1]: Entering directory '/home/junpinfoo/cmpt433/work/as4/R5/build/CMakeFiles/CMakeScratch/TryCompile-PJadNV'
+Building C object CMakeFiles/cmTC_ac432.dir/HAVE_STDATOMIC_H.c.obj
+/home/junpinfoo/zephyr-sdk-0.17.0/arm-zephyr-eabi/bin/arm-zephyr-eabi-gcc   -c -o CMakeFiles/cmTC_ac432.dir/HAVE_STDATOMIC_H.c.obj -c /home/junpinfoo/cmpt433/work/as4/R5/build/CMakeFiles/CMakeScratch/TryCompile-PJadNV/HAVE_STDATOMIC_H.c
+Linking C executable cmTC_ac432
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ac432.dir/link.txt --verbose=1
+/home/junpinfoo/zephyr-sdk-0.17.0/arm-zephyr-eabi/bin/arm-zephyr-eabi-gcc  -c CMakeFiles/cmTC_ac432.dir/HAVE_STDATOMIC_H.c.obj -o cmTC_ac432 
+arm-zephyr-eabi-gcc: warning: CMakeFiles/cmTC_ac432.dir/HAVE_STDATOMIC_H.c.obj: linker input file unused because linking not done
+gmake[1]: Leaving directory '/home/junpinfoo/cmpt433/work/as4/R5/build/CMakeFiles/CMakeScratch/TryCompile-PJadNV'
+
+
+
+Determining if files fcntl.h exist passed with the following output:
+Change Dir: /home/junpinfoo/cmpt433/work/as4/R5/build/CMakeFiles/CMakeScratch/TryCompile-UARE3z
+
+Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_62aa6/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_62aa6.dir/build.make CMakeFiles/cmTC_62aa6.dir/build
+gmake[1]: Entering directory '/home/junpinfoo/cmpt433/work/as4/R5/build/CMakeFiles/CMakeScratch/TryCompile-UARE3z'
+Building C object CMakeFiles/cmTC_62aa6.dir/HAVE_FCNTL_H.c.obj
+/home/junpinfoo/zephyr-sdk-0.17.0/arm-zephyr-eabi/bin/arm-zephyr-eabi-gcc   -Wall -Wextra -c -o CMakeFiles/cmTC_62aa6.dir/HAVE_FCNTL_H.c.obj -c /home/junpinfoo/cmpt433/work/as4/R5/build/CMakeFiles/CMakeScratch/TryCompile-UARE3z/HAVE_FCNTL_H.c
+Linking C executable cmTC_62aa6
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_62aa6.dir/link.txt --verbose=1
+/home/junpinfoo/zephyr-sdk-0.17.0/arm-zephyr-eabi/bin/arm-zephyr-eabi-gcc  -Wall -Wextra -c CMakeFiles/cmTC_62aa6.dir/HAVE_FCNTL_H.c.obj -o cmTC_62aa6 
+arm-zephyr-eabi-gcc: warning: CMakeFiles/cmTC_62aa6.dir/HAVE_FCNTL_H.c.obj: linker input file unused because linking not done
+gmake[1]: Leaving directory '/home/junpinfoo/cmpt433/work/as4/R5/build/CMakeFiles/CMakeScratch/TryCompile-UARE3z'
+
+
+
+Performing C SOURCE FILE Test check_fmacro_prefix_map__home_junpinfoo_cmpt433_work_as4_R5_CMAKE_SOURCE_DIR_C__c__nostartfiles__nostdlib__isystem___home_junpinfoo_zephyr_sdk_0_17_0_arm_zephyr_eabi_bin____lib_gcc_arm_zephyr_eabi_12_2_0_include___isystem___home_junpinfoo_zephyr_sdk_0_17_0_arm_zephyr_eabi_bin____lib_gcc_arm_zephyr_eabi_12_2_0_include_fixed___Wl___unresolved_symbols_ignore_in_object_files__Wl___entry_0__fuse_ld_bfd succeeded with the following output:
+Change Dir: /home/junpinfoo/cmpt433/work/as4/R5/build/CMakeFiles/CMakeScratch/TryCompile-g4W8ba
+
+Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_a5a2d/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_a5a2d.dir/build.make CMakeFiles/cmTC_a5a2d.dir/build
+gmake[1]: Entering directory '/home/junpinfoo/cmpt433/work/as4/R5/build/CMakeFiles/CMakeScratch/TryCompile-g4W8ba'
+Building C object CMakeFiles/cmTC_a5a2d.dir/src.c.obj
+/home/junpinfoo/zephyr-sdk-0.17.0/arm-zephyr-eabi/bin/arm-zephyr-eabi-gcc -Dcheck_fmacro_prefix_map__home_junpinfoo_cmpt433_work_as4_R5_CMAKE_SOURCE_DIR_C__c__nostartfiles__nostdlib__isystem___home_junpinfoo_zephyr_sdk_0_17_0_arm_zephyr_eabi_bin____lib_gcc_arm_zephyr_eabi_12_2_0_include___isystem___home_junpinfoo_zephyr_sdk_0_17_0_arm_zephyr_eabi_bin____lib_gcc_arm_zephyr_eabi_12_2_0_include_fixed___Wl___unresolved_symbols_ignore_in_object_files__Wl___entry_0__fuse_ld_bfd  -c -nostartfiles -nostdlib -isystem "/home/junpinfoo/zephyr-sdk-0.17.0/arm-zephyr-eabi/bin/../lib/gcc/arm-zephyr-eabi/12.2.0/include" -isystem "/home/junpinfoo/zephyr-sdk-0.17.0/arm-zephyr-eabi/bin/../lib/gcc/arm-zephyr-eabi/12.2.0/include-fixed" -Wl,--unresolved-symbols=ignore-in-object-files -Wl,--entry=0 -fuse-ld=bfd   -fmacro-prefix-map=/home/junpinfoo/cmpt433/work/as4/R5=CMAKE_SOURCE_DIR -o CMakeFiles/cmTC_a5a2d.dir/src.c.obj -c /home/junpinfoo/cmpt433/work/as4/R5/build/CMakeFiles/CMakeScratch/TryCompile-g4W8ba/src.c
+Linking C executable cmTC_a5a2d
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_a5a2d.dir/link.txt --verbose=1
+/home/junpinfoo/zephyr-sdk-0.17.0/arm-zephyr-eabi/bin/arm-zephyr-eabi-gcc  -c -nostartfiles -nostdlib -isystem "/home/junpinfoo/zephyr-sdk-0.17.0/arm-zephyr-eabi/bin/../lib/gcc/arm-zephyr-eabi/12.2.0/include" -isystem "/home/junpinfoo/zephyr-sdk-0.17.0/arm-zephyr-eabi/bin/../lib/gcc/arm-zephyr-eabi/12.2.0/include-fixed" -Wl,--unresolved-symbols=ignore-in-object-files -Wl,--entry=0 -fuse-ld=bfd CMakeFiles/cmTC_a5a2d.dir/src.c.obj -o cmTC_a5a2d 
+arm-zephyr-eabi-gcc: warning: CMakeFiles/cmTC_a5a2d.dir/src.c.obj: linker input file unused because linking not done
+gmake[1]: Leaving directory '/home/junpinfoo/cmpt433/work/as4/R5/build/CMakeFiles/CMakeScratch/TryCompile-g4W8ba'
+
+
+Source file was:
+int main(void) { return 0; }
+

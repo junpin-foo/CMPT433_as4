@@ -83,7 +83,7 @@ static void* UpdateLcdThread(void* args) {
     (void) args;
     assert(isInitialized);
     while (isRunning) {
-        UpdateLcd_withPage(Joystick_getPageCount());
+        UpdateLcd_withPage(0);
         sleepForMs(SLEEP_MS);
     }
     return NULL;
