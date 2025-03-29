@@ -73,7 +73,6 @@ AccelerometerData Accelerometer_getReading(void) {
     }
 
     uint8_t raw_data[6];
-    Period_markEvent(PERIOD_EVENT_SAMPLE_ACCEL);
     read_i2c_burst(i2c_file_desc, REG_OUT_X_L, raw_data, 6);
 
     int16_t x = (int16_t)((raw_data[1] << 8) | raw_data[0]) >> 2;
@@ -83,11 +82,4 @@ AccelerometerData Accelerometer_getReading(void) {
     sleepForMs(10);
     AccelerometerData data = {x / SENSITIVITY_2G, y / SENSITIVITY_2G, z / SENSITIVITY_2G};
     return data;
-}
-
-Period_statistics_t Accelerometer_getSamplingTime() {
-    assert(isInitialized);
-    Period_statistics_t stats;
-    Period_getStatisticsAndClear(PERIOD_EVENT_SAMPLE_ACCEL, &stats);
-    return stats;
 }

@@ -10,7 +10,6 @@
 #define _ACCELEROMETER_H_
 
 #include <stdint.h>
-#include "periodTimer.h"
 typedef struct {
     double x;
     double y;
@@ -26,6 +25,4 @@ void Accelerometer_cleanUp(void);
 // Get the current accelerometer reading.
 AccelerometerData Accelerometer_getReading();
 
-// Get the sampling time of the accelerometer.
-Period_statistics_t Accelerometer_getSamplingTime();
 #endif

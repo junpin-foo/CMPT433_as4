@@ -17,9 +17,6 @@
 #include <assert.h>
 #include "pthread.h"
 #include "updateLcd.h"
-#include "beatPlayer.h"
-#include "periodTimer.h"
-#include "terminalOutput.h"
 #include "hal/joystick.h"
 #include "sleep_timer_helper.h"
 
@@ -37,16 +34,6 @@
 
 static UWORD *s_fb;
 static bool isInitialized = false;
-static char volume[statBufferSize];
-static char beatMode[statBufferSize];
-static char bpm[statBufferSize];
-static char minAudioMs[statBufferSize];
-static char maxAudioMs[statBufferSize];
-static char avgAudioMs[statBufferSize]; 
-
-static char minAccelMs[statBufferSize];
-static char maxAccelMs[statBufferSize];
-static char avgAccelMs[statBufferSize];
 static pthread_t outputThread;
 static bool isRunning = false;
 static void* UpdateLcdThread(void* args);
@@ -113,61 +100,10 @@ void UpdateLcd_withPage(int page)
     // Initialize the RAM frame buffer to be blank (white)
     Paint_NewImage(s_fb, LCD_1IN54_WIDTH, LCD_1IN54_HEIGHT, 0, WHITE, 16);
     Paint_Clear(WHITE);
-    Period_statistics_t audioStat = TerminalOutput_getAudioStats();
-    Period_statistics_t accelStat = TerminalOutput_getAccelStats();
-    int beatModeNum = BeatPlayer_getBeatMode();
     switch (page)
     {
         case 1: // Status Screen
-            if (beatModeNum == NONE_MODE) {
-                sprintf(beatMode, "%s", "None");
-            } else if (beatModeNum == ROCK_MODE) {
-                sprintf(beatMode, "%s", "Rock");
-            } else {
-                sprintf(beatMode, "%s", "Custom");
-            }
-            sprintf(volume, "%d", BeatPlayer_getVolume());
-            sprintf(bpm, "%d", BeatPlayer_getBpm());
-            Paint_DrawString_EN(x, y, "Current Beat:", &Font20, WHITE, BLACK);
-            y += NEXTLINE_Y;
-            Paint_DrawString_EN(x, y, beatMode, &Font24, WHITE, BLACK);
-            y += NEXTLINE_Y;
-            Paint_DrawString_EN(x, LCD_1IN54_HEIGHT - VALUE_OFFSET, "Vol:", &Font16, WHITE, BLACK);
-            Paint_DrawString_EN(x + VALUE_OFFSET, LCD_1IN54_HEIGHT - VALUE_OFFSET, volume, &Font16, WHITE, BLACK);
-            Paint_DrawString_EN(LCD_1IN54_WIDTH - (VALUE_OFFSET * 2), LCD_1IN54_HEIGHT - VALUE_OFFSET, "BPM:", &Font16, WHITE, BLACK);
-            Paint_DrawString_EN(LCD_1IN54_WIDTH - VALUE_OFFSET, LCD_1IN54_HEIGHT - VALUE_OFFSET, bpm, &Font16, WHITE, BLACK);
-            break;
 
-        case 2: // Audio Timing Summary
-            sprintf(minAudioMs, "%.3f ms", audioStat.minPeriodInMs);
-            sprintf(maxAudioMs, "%.3f ms", audioStat.maxPeriodInMs);
-            sprintf(avgAudioMs, "%.3f ms", audioStat.avgPeriodInMs);
-            Paint_DrawString_EN(x, y, "Audio Timing", &Font20, WHITE, BLACK);
-            y += NEXTLINE_Y;
-            Paint_DrawString_EN(x, y, "Min: ", &Font16, WHITE, BLACK);
-            Paint_DrawString_EN(x + VALUE_OFFSET, y, minAudioMs, &Font16, WHITE, BLACK);
-            y += NEXTLINE_Y;
-            Paint_DrawString_EN(x, y, "Max: ", &Font16, WHITE, BLACK);
-            Paint_DrawString_EN(x + VALUE_OFFSET, y, maxAudioMs, &Font16, WHITE, BLACK);
-            y += NEXTLINE_Y;
-            Paint_DrawString_EN(x, y, "Avg: ", &Font16, WHITE, BLACK);
-            Paint_DrawString_EN(x + VALUE_OFFSET, y, avgAudioMs, &Font16, WHITE, BLACK);
-            break;
-
-        case 3: // Accelerometer Timing Summary
-            sprintf(minAccelMs, "%.3f ms", accelStat.minPeriodInMs);
-            sprintf(maxAccelMs, "%.3f ms", accelStat.maxPeriodInMs);
-            sprintf(avgAccelMs, "%.3f ms", accelStat.avgPeriodInMs);
-            Paint_DrawString_EN(x, y, "Accel. Timing", &Font20, WHITE, BLACK);
-            y += NEXTLINE_Y;
-            Paint_DrawString_EN(x, y, "Min: ", &Font16, WHITE, BLACK);
-            Paint_DrawString_EN(x + VALUE_OFFSET, y, minAccelMs, &Font16, WHITE, BLACK);
-            y += NEXTLINE_Y;
-            Paint_DrawString_EN(x, y, "Max: ", &Font16, WHITE, BLACK);
-            Paint_DrawString_EN(x + VALUE_OFFSET, y, maxAccelMs, &Font16, WHITE, BLACK);
-            y += NEXTLINE_Y;
-            Paint_DrawString_EN(x, y, "Avg: ", &Font16, WHITE, BLACK);
-            Paint_DrawString_EN(x + VALUE_OFFSET, y, avgAccelMs, &Font16, WHITE, BLACK);
             break;
 
         default:
