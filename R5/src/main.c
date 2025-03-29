@@ -79,47 +79,15 @@ int main(void)
 	// COLOURS
     // - 1st element in array is 1st (bottom) on LED strip; last element is last on strip (top)
     // - Bits: {Green/8 bits} {Red/8 bits} {Blue/8 bits} {White/8 bits}
-    uint32_t color[NEO_NUM_LEDS] = {
-        0x0f000000, // Green
-        0x000f0000, // Red
-        0x00000f00, // Blue
-        0x0000000f, // White
-        0x0f0f0f00, // White (via RGB)
-        0x0f0f0000, // Yellow
-        0x000f0f00, // Purple
-        0x0f000f00, // Teal
-
-        // Try these; they are birght! 
-        // (You'll need to comment out some of the above)
-        // 0xff000000, // Green Bright
-        // 0x00ff0000, // Red Bright
-        // 0x0000ff00, // Blue Bright
-        // 0xffffff00, // White
-        // 0xff0000ff, // Green Bright w/ Bright White
-        // 0x00ff00ff, // Red Bright w/ Bright White
-        // 0x0000ffff, // Blue Bright w/ Bright White
-        // 0xffffffff, // White w/ Bright White
-
-		// 0x00000000, // Green Bright
-        // 0x00000000, // Red Bright
-        // 0x00000000, // Blue Bright
-        // 0x00000000, // White
-        // 0x00000000, // Green Bright w/ Bright White
-        // 0x00000000, // Red Bright w/ Bright White
-        // 0x00000000, // Blue Bright w/ Bright White
-        // 0x00000000, // White w/ Bright White
-    }; 
-	
-	// uint32_t color2[NEO_NUM_LEDS] = {
-	// 	// Normal
-    //     // 0x0f000000, // Green
-    //     // 0x000f0000, // Red
-    //     // 0x00000f00, // Blue
-    //     // 0x0000000f, // White
-    //     // 0x0f0f0f00, // White (via RGB)
-    //     // 0x0f0f0000, // Yellow
-    //     // 0x000f0f00, // Purple
-    //     // 0x0f000f00, // Teal
+    // uint32_t color[NEO_NUM_LEDS] = {
+    //     0x0f000000, // Green
+    //     0x000f0000, // Red
+    //     0x00000f00, // Blue
+    //     0x0000000f, // White
+    //     0x0f0f0f00, // White (via RGB)
+    //     0x0f0f0000, // Yellow
+    //     0x000f0f00, // Purple
+    //     0x0f000f00, // Teal
 
     //     // Try these; they are birght! 
     //     // (You'll need to comment out some of the above)
@@ -131,52 +99,85 @@ int main(void)
     //     // 0x00ff00ff, // Red Bright w/ Bright White
     //     // 0x0000ffff, // Blue Bright w/ Bright White
     //     // 0xffffffff, // White w/ Bright White
+    // }; 
 
-	// 	// OFF
-	// 	0x00000000, // Green Bright
-    //     0x00000000, // Red Bright
-    //     0x00000000, // Blue Bright
-    //     0x00000000, // White
-    //     0x00000000, // Green Bright w/ Bright White
-    //     0x00000000, // Red Bright w/ Bright White
-    //     0x00000000, // Blue Bright w/ Bright White
-    //     0x00000000, // White w/ Bright White
-    // };    
+
 
 	pR5Base = (volatile void *) SHARED_MEM_BTCM_START;
+	uint32_t currentBrightColor = 0xff000000;
+    uint32_t currentColor =0xf0000000;
 	while (true) {
 		gpio_pin_set_dt(&neopixel, 0);
 		DELAY_NS(NEO_RESET_NS);
+	
+		//X_LOCATION_OFFSET: 0 - 9 (top - bottom); 10 is all ON
+		int xLoc = MEM_UINT32(pR5Base + X_LOCATION_OFFSET) - 1 ; // (Minus 1 here to match the LED array index)
+		// int greenColor = MEM_UINT32(pR5Base + IS_BUTTON_PRESSED_OFFSET) -1
 
-		int buttonState = MEM_UINT32(pR5Base + IS_BUTTON_PRESSED_OFFSET);
-		if (buttonState) {
-			// Turn off all LEDs
-			for (int j = 0; j < NEO_NUM_LEDS; j++) {
-				color[j] = 0x000f0000; // Set all to red
+		if(xLoc == 9){
+			for(int j = (NEO_NUM_LEDS - 1); j >= 0; j--) {
+				for(int i = 31; i >= 0; i--) {
+					if((currentBrightColor & ((uint32_t)0x1 << i ))) {
+						gpio_pin_set_dt(&neopixel, 1);
+						NEO_DELAY_ONE_ON();
+						gpio_pin_set_dt(&neopixel, 0);
+						NEO_DELAY_ONE_OFF();
+					} else {
+						gpio_pin_set_dt(&neopixel, 1);
+						NEO_DELAY_ZERO_ON();
+						gpio_pin_set_dt(&neopixel, 0);
+						NEO_DELAY_ZERO_OFF();
+					}
+				}
 			}
-		} else {
-			// Turn on all LEDs
-			for (int j = 0; j < NEO_NUM_LEDS; j++) {
-				color[j] = 0x0f000000; // Set all to green
-			}
+			continue;
 		}
 
-		for(int j = 0; j < NEO_NUM_LEDS; j++) {
-			for(int i = 31; i >= 0; i--) {
-				if(color[j] & ((uint32_t)0x1 << i)) {
-					gpio_pin_set_dt(&neopixel, 1);
-					NEO_DELAY_ONE_ON();
-					gpio_pin_set_dt(&neopixel, 0);
-					NEO_DELAY_ONE_OFF();
-				} else {
-					gpio_pin_set_dt(&neopixel, 1);
-					NEO_DELAY_ZERO_ON();
-					gpio_pin_set_dt(&neopixel, 0);
-					NEO_DELAY_ZERO_OFF();
+		for(int j = (NEO_NUM_LEDS - 1); j >= 0; j--) {
+			if (j == (xLoc-1) || (j == (xLoc +1))) {
+				for(int i = 31; i >= 0; i--) {
+					if((currentColor & ((uint32_t)0x1 << i ))) {
+						gpio_pin_set_dt(&neopixel, 1);
+						NEO_DELAY_ONE_ON();
+						gpio_pin_set_dt(&neopixel, 0);
+						NEO_DELAY_ONE_OFF();
+					} else {
+						gpio_pin_set_dt(&neopixel, 1);
+						NEO_DELAY_ZERO_ON();
+						gpio_pin_set_dt(&neopixel, 0);
+						NEO_DELAY_ZERO_OFF();
+					}
+				}
+			} else if (j == xLoc) {
+				for(int i = 31; i >= 0; i--) {
+					if((currentBrightColor & ((uint32_t)0x1 << i ))) {
+						gpio_pin_set_dt(&neopixel, 1);
+						NEO_DELAY_ONE_ON();
+						gpio_pin_set_dt(&neopixel, 0);
+						NEO_DELAY_ONE_OFF();
+					} else {
+						gpio_pin_set_dt(&neopixel, 1);
+						NEO_DELAY_ZERO_ON();
+						gpio_pin_set_dt(&neopixel, 0);
+						NEO_DELAY_ZERO_OFF();
+					}
+				}
+			} else {
+				for(int i = 31; i >= 0; i--) {
+					if((0x00000000 & ((uint32_t)0x1 << i ))) {
+						gpio_pin_set_dt(&neopixel, 1);
+						NEO_DELAY_ONE_ON();
+						gpio_pin_set_dt(&neopixel, 0);
+						NEO_DELAY_ONE_OFF();
+					} else {
+						gpio_pin_set_dt(&neopixel, 1);
+						NEO_DELAY_ZERO_ON();
+						gpio_pin_set_dt(&neopixel, 0);
+						NEO_DELAY_ZERO_OFF();
+					}
 				}
 			}
 		}
-
 		gpio_pin_set_dt(&neopixel, 0);
 		NEO_DELAY_RESET();
 

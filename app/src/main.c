@@ -46,6 +46,17 @@ volatile void* getR5MmapAddr(void)
     return pR5Base;
 }
 
+typedef struct {
+    double x;
+    double y;
+} GameState;
+
+GameState randomGameState(void) {
+    GameState state;
+    state.x = ((double)rand() / RAND_MAX) - 0.5;
+    state.y = ((double)rand() / RAND_MAX) - 0.5;
+    return state;
+}
 int main(void)
 {
 	Ic2_initialize();
@@ -53,15 +64,42 @@ int main(void)
 	Joystick_initialize();
 
 	volatile uint8_t *pR5Base = getR5MmapAddr();
-
+    int count = 0;
 	while(true){
 		if(Joystick_isButtonPressed()){
-			MEM_UINT32(pR5Base + IS_BUTTON_PRESSED_OFFSET)  = 1;
+            count = count % 9 + 1;
 			printf("Button Pressed\n");
 		}
-		else {
-			MEM_UINT32(pR5Base + IS_BUTTON_PRESSED_OFFSET)  = 0;
-		}
+		MEM_UINT32(pR5Base + X_LOCATION_OFFSET)  = count;
 		sleepForMs(100);
 	}
+
+    // Accelerometer_initialize();
+    // GameState currentGame = randomGameState();
+    // // Tilt up: x -> -1.0
+    // // Tilt down: x -> 1.0
+    // // Lean right: y -> -1
+    // // Lean left : y -> 1
+    // while(true){
+    //     AccelerometerData data =  Accelerometer_getReading();
+    //     printf("X: %.1f, Y: %.1f\n", data.x, data.y);
+    //     if(data.x > currentGame.x) { //User has to point up (point 0.5, current 0.7 -> tilt up )
+    //         //
+    //     } else if (data.x < currentGame.x){ //User has to point down 
+    //         //
+    //     } else { // up/down correct
+            
+    //     }
+
+    //     if (data.y > currentGame.y) { //User has to lean right
+    //         //
+    //     } else if (data.y < currentGame.y) { //User has to lean left
+    //         //
+    //     } else { // left/right correct
+
+    //     }
+
+
+    //     sleepForMs(200);
+    // }
 }

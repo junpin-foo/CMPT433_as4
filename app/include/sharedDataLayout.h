@@ -11,7 +11,8 @@
 
 #define MSG_OFFSET 0
 #define MSG_SIZE   32
-#define IS_BUTTON_PRESSED_OFFSET (MSG_OFFSET + sizeof(uint32_t))
+#define X_LOCATION_OFFSET (MSG_OFFSET + sizeof(uint32_t))
+#define COLOR_OFFSET (X_LOCATION_OFFSET + sizeof(uint32_t))
 
 #define MEM_UINT8(addr) *(uint8_t*)(addr)
 #define MEM_UINT32(addr) *(uint32_t*)(addr)
