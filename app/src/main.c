@@ -49,6 +49,14 @@ volatile void* getR5MmapAddr(void)
     return pR5Base;
 }
 
+void freeR5MmapAddr(volatile uint8_t* pR5Base)
+{
+    if (munmap((void*) pR5Base, MEM_LENGTH)) {
+        perror("R5 munmap failed");
+        exit(EXIT_FAILURE);
+    }
+}
+
 typedef struct {
     double x;
     double y;
@@ -71,23 +79,6 @@ int main(void)
     Lcd_init();
 
 	volatile uint8_t *pR5Base = getR5MmapAddr();
-    // int count = 0;
-    // int color_count = 0;
-	// while(true){
-	// 	if(Joystick_isButtonPressed()){
-    //         count = (count + 1) % 11;
-	// 		printf("Button Pressed, %d\n", count);
-	// 	}
-    //     if(BtnStateMachine_getValue() != 0){
-    //         color_count = (color_count + 1) % 3;
-	// 		printf("Rotary Button Pressed, %d\n", color_count);
-    //         BtnStateMachine_setValue(0);
-	// 	}
-	// 	MEM_UINT32(pR5Base + X_LOCATION_OFFSET)  = count;
-    //     MEM_UINT32(pR5Base + COLOR_OFFSET)  = color_count;
-	// 	sleepForMs(100);
-	// }
-
     GameState currentGame = randomGameState();
     // GameState currentGame = {0.0, 0.0};
     // Tilt up: x -> -1.0
@@ -140,6 +131,16 @@ int main(void)
                 MEM_UINT32(pR5Base + X_LOCATION_OFFSET)  = 12; //12 for miss
             }
 		}
+        if(Joystick_isButtonPressed()){
+            MEM_UINT32(pR5Base + X_LOCATION_OFFSET) = 13; // For remove all effect
+            freeR5MmapAddr(pR5Base);
+            break;
+		}
         sleepForMs(200);
     }
+    Lcd_cleanup();
+    Joystick_cleanUp();
+    Gpio_cleanup();
+    Ic2_cleanUp();
+    return 0;
 }
