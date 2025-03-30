@@ -3,6 +3,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/finddot.dir/src/main.c.o.d"
   "CMakeFiles/finddot.dir/src/sleep_timer_helper.c.o"
   "CMakeFiles/finddot.dir/src/sleep_timer_helper.c.o.d"
+  "CMakeFiles/finddot.dir/src/stats.c.o"
+  "CMakeFiles/finddot.dir/src/stats.c.o.d"
   "CMakeFiles/finddot.dir/src/updateLcd.c.o"
   "CMakeFiles/finddot.dir/src/updateLcd.c.o.d"
   "finddot"

@@ -19,6 +19,8 @@
 #include "updateLcd.h"
 #include "hal/joystick.h"
 #include "sleep_timer_helper.h"
+#include <time.h>
+#include <stats.h>
 
 #define DELAY_MS 2000
 #define SLEEP_MS 10
@@ -31,6 +33,11 @@
 #define MAX_MS_X 160
 #define VALUE_OFFSET 40
 #define statBufferSize 12
+
+static char hitStr[statBufferSize];
+static char missStr[statBufferSize];
+static char uptimeStr[statBufferSize];
+static time_t startTime;
 
 static UWORD *s_fb;
 static bool isInitialized = false;
@@ -61,6 +68,7 @@ void UpdateLcd_init()
         perror("Failed to apply for black memory");
         exit(0);
     }
+    startTime = time(NULL);
     isRunning = true;
     isInitialized = true;
     pthread_create(&outputThread, NULL, &UpdateLcdThread, NULL);
@@ -83,33 +91,47 @@ static void* UpdateLcdThread(void* args) {
     (void) args;
     assert(isInitialized);
     while (isRunning) {
-        UpdateLcd_withPage(0);
+        UpdateLcd_withScore(getHits(), getMisses());
         sleepForMs(SLEEP_MS);
     }
     return NULL;
 }
 
 
-void UpdateLcd_withPage(int page)
+void UpdateLcd_withScore(int hit, int miss)
 {
     assert(isInitialized);
 
     const int x = INITIAL_X;
     int y = INITIAL_Y;
 
+    sprintf(hitStr, "%d", hit);
+    sprintf(missStr, "%d", miss);
+
+    printf("Hit: %s, Miss: %s\n", hitStr, missStr);
+
+    // Calculate uptime
+    time_t currentTime = time(NULL);
+    int elapsedSeconds = (int)(currentTime - startTime);
+    int minutes = elapsedSeconds / 60;
+    int seconds = elapsedSeconds % 60;
+    if (minutes < 0) minutes = 0;
+    if (seconds < 0) seconds = 0;
+    sprintf(uptimeStr, "%02d:%02d", minutes, seconds);
+
     // Initialize the RAM frame buffer to be blank (white)
     Paint_NewImage(s_fb, LCD_1IN54_WIDTH, LCD_1IN54_HEIGHT, 0, WHITE, 16);
     Paint_Clear(WHITE);
-    switch (page)
-    {
-        case 1: // Status Screen
 
-            break;
+    Paint_DrawString_EN(x, y, "Hit(s): ", &Font16, WHITE, BLACK);
+    Paint_DrawString_EN(x + VALUE_OFFSET, y, hitStr, &Font16, WHITE, BLACK);
+    y += NEXTLINE_Y;
+    Paint_DrawString_EN(x, y, "Miss(es): ", &Font16, WHITE, BLACK);
+    Paint_DrawString_EN(x + VALUE_OFFSET, y, missStr, &Font16, WHITE, BLACK);
+    y += NEXTLINE_Y;
+    Paint_DrawString_EN(x, y, "Uptime: ", &Font16, WHITE, BLACK);
+    Paint_DrawString_EN(x + VALUE_OFFSET, y, uptimeStr, &Font16, WHITE, BLACK);
 
-        default:
-            Paint_DrawString_EN(x, y, "Invalid Page", &Font20, WHITE, BLACK);
-            break;
-    }
 
     // Send the RAM frame buffer to the LCD (actually display it)
     LCD_1IN54_Display(s_fb);

@@ -97,10 +97,24 @@ app/CMakeFiles/finddot.dir/src/sleep_timer_helper.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/finddot.dir/src/sleep_timer_helper.c.s"
 	cd /home/junpinfoo/cmpt433/work/as4/build/app && aarch64-linux-gnu-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/junpinfoo/cmpt433/work/as4/app/src/sleep_timer_helper.c -o CMakeFiles/finddot.dir/src/sleep_timer_helper.c.s
 
+app/CMakeFiles/finddot.dir/src/stats.c.o: app/CMakeFiles/finddot.dir/flags.make
+app/CMakeFiles/finddot.dir/src/stats.c.o: /home/junpinfoo/cmpt433/work/as4/app/src/stats.c
+app/CMakeFiles/finddot.dir/src/stats.c.o: app/CMakeFiles/finddot.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/junpinfoo/cmpt433/work/as4/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object app/CMakeFiles/finddot.dir/src/stats.c.o"
+	cd /home/junpinfoo/cmpt433/work/as4/build/app && aarch64-linux-gnu-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT app/CMakeFiles/finddot.dir/src/stats.c.o -MF CMakeFiles/finddot.dir/src/stats.c.o.d -o CMakeFiles/finddot.dir/src/stats.c.o -c /home/junpinfoo/cmpt433/work/as4/app/src/stats.c
+
+app/CMakeFiles/finddot.dir/src/stats.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/finddot.dir/src/stats.c.i"
+	cd /home/junpinfoo/cmpt433/work/as4/build/app && aarch64-linux-gnu-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/junpinfoo/cmpt433/work/as4/app/src/stats.c > CMakeFiles/finddot.dir/src/stats.c.i
+
+app/CMakeFiles/finddot.dir/src/stats.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/finddot.dir/src/stats.c.s"
+	cd /home/junpinfoo/cmpt433/work/as4/build/app && aarch64-linux-gnu-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/junpinfoo/cmpt433/work/as4/app/src/stats.c -o CMakeFiles/finddot.dir/src/stats.c.s
+
 app/CMakeFiles/finddot.dir/src/updateLcd.c.o: app/CMakeFiles/finddot.dir/flags.make
 app/CMakeFiles/finddot.dir/src/updateLcd.c.o: /home/junpinfoo/cmpt433/work/as4/app/src/updateLcd.c
 app/CMakeFiles/finddot.dir/src/updateLcd.c.o: app/CMakeFiles/finddot.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/junpinfoo/cmpt433/work/as4/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object app/CMakeFiles/finddot.dir/src/updateLcd.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/junpinfoo/cmpt433/work/as4/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object app/CMakeFiles/finddot.dir/src/updateLcd.c.o"
 	cd /home/junpinfoo/cmpt433/work/as4/build/app && aarch64-linux-gnu-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT app/CMakeFiles/finddot.dir/src/updateLcd.c.o -MF CMakeFiles/finddot.dir/src/updateLcd.c.o.d -o CMakeFiles/finddot.dir/src/updateLcd.c.o -c /home/junpinfoo/cmpt433/work/as4/app/src/updateLcd.c
 
 app/CMakeFiles/finddot.dir/src/updateLcd.c.i: cmake_force
@@ -115,6 +129,7 @@ app/CMakeFiles/finddot.dir/src/updateLcd.c.s: cmake_force
 finddot_OBJECTS = \
 "CMakeFiles/finddot.dir/src/main.c.o" \
 "CMakeFiles/finddot.dir/src/sleep_timer_helper.c.o" \
+"CMakeFiles/finddot.dir/src/stats.c.o" \
 "CMakeFiles/finddot.dir/src/updateLcd.c.o"
 
 # External object files for target finddot
@@ -122,13 +137,14 @@ finddot_EXTERNAL_OBJECTS =
 
 app/finddot: app/CMakeFiles/finddot.dir/src/main.c.o
 app/finddot: app/CMakeFiles/finddot.dir/src/sleep_timer_helper.c.o
+app/finddot: app/CMakeFiles/finddot.dir/src/stats.c.o
 app/finddot: app/CMakeFiles/finddot.dir/src/updateLcd.c.o
 app/finddot: app/CMakeFiles/finddot.dir/build.make
 app/finddot: hal/libhal.a
 app/finddot: lcd/liblcd.a
 app/finddot: lgpio/liblgpio.a
 app/finddot: app/CMakeFiles/finddot.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/junpinfoo/cmpt433/work/as4/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking C executable finddot"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/junpinfoo/cmpt433/work/as4/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking C executable finddot"
 	cd /home/junpinfoo/cmpt433/work/as4/build/app && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/finddot.dir/link.txt --verbose=$(VERBOSE)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold "Copying ARM executable to public NFS directory"
 	cd /home/junpinfoo/cmpt433/work/as4/build/app && /usr/bin/cmake -E copy /home/junpinfoo/cmpt433/work/as4/build/app/finddot ~/cmpt433/public/myApps/finddot

@@ -68,6 +68,23 @@ static void initialize_gpio(const struct gpio_dt_spec *pPin, int direction)
 	}
 }
 
+static void setColor(uint32_t color) 
+{
+	for(int i = 31; i >= 0; i--) {
+		if((color & ((uint32_t)0x1 << i ))) {
+			gpio_pin_set_dt(&neopixel, 1);
+			NEO_DELAY_ONE_ON();
+			gpio_pin_set_dt(&neopixel, 0);
+			NEO_DELAY_ONE_OFF();
+		} else {
+			gpio_pin_set_dt(&neopixel, 1);
+			NEO_DELAY_ZERO_ON();
+			gpio_pin_set_dt(&neopixel, 0);
+			NEO_DELAY_ZERO_OFF();
+		}
+	}
+}
+
 int main(void)
 {
 	printf("Hello World! %s\n", CONFIG_BOARD_TARGET);
@@ -110,7 +127,7 @@ int main(void)
 		gpio_pin_set_dt(&neopixel, 0);
 		DELAY_NS(NEO_RESET_NS);
 	
-		//X_LOCATION_OFFSET: 0 - 9 (top - bottom); 10 is all ON
+		//X_LOCATION_OFFSET: 0 - 9 (top - bottom); 10 is all ON; 11 for hit, 12 for miss
 		int xLoc = MEM_UINT32(pR5Base + X_LOCATION_OFFSET) - 1 ; // (Minus 1 here to match the LED array index)
 		//COLOR_OFFSET: 0 - 2 (0:Green, 1:Red, 2:Blue)
 		int colorCode = MEM_UINT32(pR5Base + COLOR_OFFSET);
@@ -128,68 +145,56 @@ int main(void)
 		}
 
 	
-		if(xLoc == 9){
+		if(xLoc == 9){ //ALL ON
 			for(int j = (NEO_NUM_LEDS - 1); j >= 0; j--) {
-				for(int i = 31; i >= 0; i--) {
-					if((currentBrightColor & ((uint32_t)0x1 << i ))) {
-						gpio_pin_set_dt(&neopixel, 1);
-						NEO_DELAY_ONE_ON();
-						gpio_pin_set_dt(&neopixel, 0);
-						NEO_DELAY_ONE_OFF();
+				setColor(currentBrightColor);
+			}
+			continue;
+		} else if (xLoc == 10) { //HIT
+			uint32_t explosion_colors[] = {0x00ff0000, 0xffff0000, 0xffffffff}; // red, yellow, white
+			int delay_time = 25; 
+			setColor(explosion_colors[0]);
+			k_busy_wait(delay_time * 10000); // Wait before expanding further
+			for (int k = 0; k <= NEO_NUM_LEDS / 2; k++) {
+				for (int j = (NEO_NUM_LEDS - 1); j >= 0; j--) {
+					if(j == (NEO_NUM_LEDS / 2 - k) || j == (NEO_NUM_LEDS / 2 + k)){
+						setColor(explosion_colors[0]);
+					} else if (j == (NEO_NUM_LEDS / 2 - k) -1|| j == (NEO_NUM_LEDS / 2 + k) +1){
+						setColor(explosion_colors[1]);
+					}
+					else if (j == (NEO_NUM_LEDS / 2 - k) -2|| j == (NEO_NUM_LEDS / 2 + k) +2){
+						setColor(explosion_colors[2]);
 					} else {
-						gpio_pin_set_dt(&neopixel, 1);
-						NEO_DELAY_ZERO_ON();
-						gpio_pin_set_dt(&neopixel, 0);
-						NEO_DELAY_ZERO_OFF();
+						setColor(0x00000000);
 					}
 				}
+				k_busy_wait(delay_time * 10000); // Wait before expanding further
+			}
+			continue;
+		}
+		else if (xLoc == 11) { //MISS
+			int delay_time = 25;
+			for(int k = 0;  k < NEO_NUM_LEDS; k++) {
+				for(int j = (NEO_NUM_LEDS - 1); j >= 0; j--) {
+					if (j == k) { //on
+						setColor(0x000f0f00); //purple
+					}
+					else { //off
+						setColor(0x00000000);
+					}
+				}
+				k_busy_wait(delay_time * 10000);; // Wait before changing colors
 			}
 			continue;
 		}
 
 		for(int j = (NEO_NUM_LEDS - 1); j >= 0; j--) {
 			if (j == (xLoc-1) || (j == (xLoc +1))) {
-				for(int i = 31; i >= 0; i--) {
-					if((currentColor & ((uint32_t)0x1 << i ))) {
-						gpio_pin_set_dt(&neopixel, 1);
-						NEO_DELAY_ONE_ON();
-						gpio_pin_set_dt(&neopixel, 0);
-						NEO_DELAY_ONE_OFF();
-					} else {
-						gpio_pin_set_dt(&neopixel, 1);
-						NEO_DELAY_ZERO_ON();
-						gpio_pin_set_dt(&neopixel, 0);
-						NEO_DELAY_ZERO_OFF();
-					}
-				}
+				setColor(currentColor);
 			} else if (j == xLoc) {
-				for(int i = 31; i >= 0; i--) {
-					if((currentBrightColor & ((uint32_t)0x1 << i ))) {
-						gpio_pin_set_dt(&neopixel, 1);
-						NEO_DELAY_ONE_ON();
-						gpio_pin_set_dt(&neopixel, 0);
-						NEO_DELAY_ONE_OFF();
-					} else {
-						gpio_pin_set_dt(&neopixel, 1);
-						NEO_DELAY_ZERO_ON();
-						gpio_pin_set_dt(&neopixel, 0);
-						NEO_DELAY_ZERO_OFF();
-					}
-				}
+				setColor(currentBrightColor);
 			} else {
-				for(int i = 31; i >= 0; i--) {
-					if((0x00000000 & ((uint32_t)0x1 << i ))) {
-						gpio_pin_set_dt(&neopixel, 1);
-						NEO_DELAY_ONE_ON();
-						gpio_pin_set_dt(&neopixel, 0);
-						NEO_DELAY_ONE_OFF();
-					} else {
-						gpio_pin_set_dt(&neopixel, 1);
-						NEO_DELAY_ZERO_ON();
-						gpio_pin_set_dt(&neopixel, 0);
-						NEO_DELAY_ZERO_OFF();
-					}
-				}
+				setColor(0x00000000);
 			}
 		}
 		gpio_pin_set_dt(&neopixel, 0);

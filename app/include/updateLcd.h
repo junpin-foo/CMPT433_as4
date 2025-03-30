@@ -15,6 +15,6 @@
 //Initialize and clean up the LCD screen.
 void UpdateLcd_init();
 void UpdateLcd_cleanup();
-void UpdateLcd_withPage(int page);
+void UpdateLcd_withScore(int hit, int miss);
 
 #endif

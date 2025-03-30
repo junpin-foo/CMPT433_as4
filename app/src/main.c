@@ -16,7 +16,8 @@
 #include <stdlib.h>
 #include <sys/mman.h>
 #include <math.h>
-
+#include <stats.h>
+#include <updateLcd.h>
 #include "sharedDataLayout.h"
 
 
@@ -59,6 +60,7 @@ GameState randomGameState(void) {
     state.y = ((double)rand() / RAND_MAX) - 0.5;
     return state;
 }
+
 int main(void)
 {
 	Ic2_initialize();
@@ -66,7 +68,7 @@ int main(void)
 	Joystick_initialize();
     BtnStateMachine_init();
     Accelerometer_initialize();
-
+    Lcd_init();
 
 	volatile uint8_t *pR5Base = getR5MmapAddr();
     // int count = 0;
@@ -86,8 +88,8 @@ int main(void)
 	// 	sleepForMs(100);
 	// }
 
-    // GameState currentGame = randomGameState();
-    GameState currentGame = {0.0, 0.0};
+    GameState currentGame = randomGameState();
+    // GameState currentGame = {0.0, 0.0};
     // Tilt up: x -> -1.0
     // Tilt down: x -> 1.0
     // Lean right: y -> -1
@@ -123,8 +125,21 @@ int main(void)
             MEM_UINT32(pR5Base + COLOR_OFFSET)  = 2;
 
         }
+
+        if(BtnStateMachine_getValue() != 0){
+			printf("Rotary Button Pressed\n");
+            BtnStateMachine_setValue(0);
+            if(aimError <= 0.1 && aimErrorY <= 0.1){ //hit
+                printf("Hit State\n");
+                incrementHits();
+                MEM_UINT32(pR5Base + X_LOCATION_OFFSET)  = 11; //11 for hit
+                currentGame = randomGameState(); //reset the game
+            } else { //miss
+                printf("Miss State\n");
+                incrementMisses();
+                MEM_UINT32(pR5Base + X_LOCATION_OFFSET)  = 12; //12 for miss
+            }
+		}
         sleepForMs(200);
     }
-    //     sleepForMs(200);
-    // }
 }

@@ -144,4 +144,5 @@ app/CMakeFiles/finddot.dir/src/updateLcd.c.o: \
  /usr/aarch64-linux-gnu/include/bits/pthread_stack_min.h \
  /home/junpinfoo/cmpt433/work/as4/app/include/updateLcd.h \
  /home/junpinfoo/cmpt433/work/as4/hal/include/hal/joystick.h \
- /home/junpinfoo/cmpt433/work/as4/app/include/sleep_timer_helper.h
+ /home/junpinfoo/cmpt433/work/as4/app/include/sleep_timer_helper.h \
+ /home/junpinfoo/cmpt433/work/as4/app/include/stats.h

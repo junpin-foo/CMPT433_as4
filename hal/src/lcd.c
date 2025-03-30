@@ -1,5 +1,5 @@
 /* lcd.c
-* LCD module starts thread that updates the screen with the current frequency, dip count and max time every second.
+* LCD module starts thread that updates the screen 
 */
 
 #include <stdio.h>		//printf()

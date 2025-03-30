@@ -10,6 +10,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/junpinfoo/cmpt433/work/as4/app/src/main.c" "app/CMakeFiles/finddot.dir/src/main.c.o" "gcc" "app/CMakeFiles/finddot.dir/src/main.c.o.d"
   "/home/junpinfoo/cmpt433/work/as4/app/src/sleep_timer_helper.c" "app/CMakeFiles/finddot.dir/src/sleep_timer_helper.c.o" "gcc" "app/CMakeFiles/finddot.dir/src/sleep_timer_helper.c.o.d"
+  "/home/junpinfoo/cmpt433/work/as4/app/src/stats.c" "app/CMakeFiles/finddot.dir/src/stats.c.o" "gcc" "app/CMakeFiles/finddot.dir/src/stats.c.o.d"
   "/home/junpinfoo/cmpt433/work/as4/app/src/updateLcd.c" "app/CMakeFiles/finddot.dir/src/updateLcd.c.o" "gcc" "app/CMakeFiles/finddot.dir/src/updateLcd.c.o.d"
   )
 

@@ -97,4 +97,6 @@ app/CMakeFiles/finddot.dir/src/main.c.o: \
  /usr/aarch64-linux-gnu/include/bits/fp-fast.h \
  /usr/aarch64-linux-gnu/include/bits/mathcalls-helper-functions.h \
  /usr/aarch64-linux-gnu/include/bits/mathcalls.h \
+ /home/junpinfoo/cmpt433/work/as4/app/include/stats.h \
+ /home/junpinfoo/cmpt433/work/as4/app/include/updateLcd.h \
  /home/junpinfoo/cmpt433/work/as4/app/include/sharedDataLayout.h

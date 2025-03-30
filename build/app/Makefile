@@ -178,6 +178,30 @@ src/sleep_timer_helper.c.s:
 	cd /home/junpinfoo/cmpt433/work/as4/build && $(MAKE) $(MAKESILENT) -f app/CMakeFiles/finddot.dir/build.make app/CMakeFiles/finddot.dir/src/sleep_timer_helper.c.s
 .PHONY : src/sleep_timer_helper.c.s
 
+src/stats.o: src/stats.c.o
+.PHONY : src/stats.o
+
+# target to build an object file
+src/stats.c.o:
+	cd /home/junpinfoo/cmpt433/work/as4/build && $(MAKE) $(MAKESILENT) -f app/CMakeFiles/finddot.dir/build.make app/CMakeFiles/finddot.dir/src/stats.c.o
+.PHONY : src/stats.c.o
+
+src/stats.i: src/stats.c.i
+.PHONY : src/stats.i
+
+# target to preprocess a source file
+src/stats.c.i:
+	cd /home/junpinfoo/cmpt433/work/as4/build && $(MAKE) $(MAKESILENT) -f app/CMakeFiles/finddot.dir/build.make app/CMakeFiles/finddot.dir/src/stats.c.i
+.PHONY : src/stats.c.i
+
+src/stats.s: src/stats.c.s
+.PHONY : src/stats.s
+
+# target to generate assembly for a file
+src/stats.c.s:
+	cd /home/junpinfoo/cmpt433/work/as4/build && $(MAKE) $(MAKESILENT) -f app/CMakeFiles/finddot.dir/build.make app/CMakeFiles/finddot.dir/src/stats.c.s
+.PHONY : src/stats.c.s
+
 src/updateLcd.o: src/updateLcd.c.o
 .PHONY : src/updateLcd.o
 
@@ -217,6 +241,9 @@ help:
 	@echo "... src/sleep_timer_helper.o"
 	@echo "... src/sleep_timer_helper.i"
 	@echo "... src/sleep_timer_helper.s"
+	@echo "... src/stats.o"
+	@echo "... src/stats.i"
+	@echo "... src/stats.s"
 	@echo "... src/updateLcd.o"
 	@echo "... src/updateLcd.i"
 	@echo "... src/updateLcd.s"
