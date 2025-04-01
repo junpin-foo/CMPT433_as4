@@ -200,6 +200,8 @@ int main(void)
 		gpio_pin_set_dt(&neopixel, 0);
 		NEO_DELAY_RESET();
 
+		MEM_UINT32(pR5Base + FLAG_OFFSET) = 0; //can change data flag
+
 		// Keep looping in case we plug in NeoPixel later
 		k_busy_wait(1 * 10000);
 	}

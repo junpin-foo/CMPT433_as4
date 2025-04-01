@@ -127,16 +127,22 @@ void* FindDot_thread(void* arg)
         }
 
         if(BtnStateMachine_getValue() != 0){
+            int flag = MEM_UINT32(pR5Base + FLAG_OFFSET) ; //0 = ready to change data, 1 = dont update data, animation happening
 			printf("Rotary Button Pressed\n");
             BtnStateMachine_setValue(0);
+            if(flag == 1){
+                continue; //dont update data, animation happening
+            }
             if(aimError <= 0.1 && aimErrorY <= 0.1){ //hit
                 printf("Hit State\n");
                 incrementHits();
+                MEM_UINT32(pR5Base + FLAG_OFFSET) = 1; //dont change data
                 MEM_UINT32(pR5Base + X_LOCATION_OFFSET)  = 11; //11 for hit
                 currentGame = randomGameState(); //reset the game
             } else { //miss
                 printf("Miss State\n");
                 incrementMisses();
+                MEM_UINT32(pR5Base + FLAG_OFFSET) = 1; //dont change data
                 MEM_UINT32(pR5Base + X_LOCATION_OFFSET)  = 12; //12 for miss
             }
 		}

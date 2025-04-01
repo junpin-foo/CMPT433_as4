@@ -31,7 +31,9 @@
 #define FREQUENCY_X 140
 #define DIPS_X 120
 #define MAX_MS_X 160
-#define VALUE_OFFSET 40
+#define HIT_OFFSET 100
+#define MISS_OFFSET 130
+#define TIME_OFFSET 100
 #define statBufferSize 12
 
 static char hitStr[statBufferSize];
@@ -123,14 +125,14 @@ void UpdateLcd_withScore(int hit, int miss)
     Paint_NewImage(s_fb, LCD_1IN54_WIDTH, LCD_1IN54_HEIGHT, 0, WHITE, 16);
     Paint_Clear(WHITE);
 
-    Paint_DrawString_EN(x, y, "Hit(s): ", &Font16, WHITE, BLACK);
-    Paint_DrawString_EN(x + VALUE_OFFSET, y, hitStr, &Font16, WHITE, BLACK);
+    Paint_DrawString_EN(x, y, "Hit(s): ", &Font20, WHITE, BLACK);
+    Paint_DrawString_EN(x + HIT_OFFSET, y, hitStr, &Font20, WHITE, BLACK);
     y += NEXTLINE_Y;
-    Paint_DrawString_EN(x, y, "Miss(es): ", &Font16, WHITE, BLACK);
-    Paint_DrawString_EN(x + VALUE_OFFSET, y, missStr, &Font16, WHITE, BLACK);
+    Paint_DrawString_EN(x, y, "Miss(es): ", &Font20, WHITE, BLACK);
+    Paint_DrawString_EN(x + MISS_OFFSET, y, missStr, &Font20, WHITE, BLACK);
     y += NEXTLINE_Y;
-    Paint_DrawString_EN(x, y, "Uptime: ", &Font16, WHITE, BLACK);
-    Paint_DrawString_EN(x + VALUE_OFFSET, y, uptimeStr, &Font16, WHITE, BLACK);
+    Paint_DrawString_EN(x, y, "Uptime: ", &Font20, WHITE, BLACK);
+    Paint_DrawString_EN(x + TIME_OFFSET, y, uptimeStr, &Font20, WHITE, BLACK);
 
 
     // Send the RAM frame buffer to the LCD (actually display it)
