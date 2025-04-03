@@ -1,13 +1,16 @@
+/* sharedDataLayout.h
+* This file defines the layout of shared data between the R5 and A53 cores.
+* 1. Message buffer
+* 2. X location - which LED to light up. (0-9)
+* 3. Color - what color to display on the LCD.
+* 4. Flag - tell us when the animation current running is done.
+*/
+
 #ifndef _SHARED_DATA_STRUCT_H_
 #define _SHARED_DATA_STRUCT_H_
 
 #include <stdbool.h>
 #include <stdint.h>
-
-// R5 Shared Memory Note
-// - It seems that using a struct for the ATCM memory does not work 
-//   (hangs when accessing memory via a struct pointer).
-// - Therefore, using an array.
 
 #define MSG_OFFSET 0
 #define MSG_SIZE   32

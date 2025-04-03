@@ -1,5 +1,5 @@
 /* sleep_timer_helper.c
- *
+* This file contains helper functions for sleeping and calculating time differences.
 */
 
 #include <stdio.h>	

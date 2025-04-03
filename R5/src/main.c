@@ -149,6 +149,7 @@ int main(void)
 			for(int j = (NEO_NUM_LEDS - 1); j >= 0; j--) {
 				setColor(currentBrightColor);
 			}
+			MEM_UINT32(pR5Base + FLAG_OFFSET) = 0; //can change data flag
 			continue;
 		} else if (xLoc == 10) { //HIT
 			uint32_t explosion_colors[] = {0x00ff0000, 0xffff0000, 0xffffffff}; // red, yellow, white
@@ -170,6 +171,7 @@ int main(void)
 				}
 				k_busy_wait(delay_time * 10000); // Wait before expanding further
 			}
+			MEM_UINT32(pR5Base + FLAG_OFFSET) = 0; //can change data flag
 			continue;
 		}
 		else if (xLoc == 11) { //MISS
@@ -185,6 +187,7 @@ int main(void)
 				}
 				k_busy_wait(delay_time * 10000);; // Wait before changing colors
 			}
+			MEM_UINT32(pR5Base + FLAG_OFFSET) = 0; //can change data flag
 			continue;
 		}
 

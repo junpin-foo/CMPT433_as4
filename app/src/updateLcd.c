@@ -1,8 +1,7 @@
 /* updateLcd.c
 * 
 * This file contains the implementation of the LCD update module. 
-* The module is responsible for updating the LCD display with the current beat mode, volume, and BPM.
-* The module also displays the audio and accelerometer timing statistics.
+* The module is responsible for updating the LCD display with the current score and uptime.
 *
 */
 
@@ -35,6 +34,7 @@
 #define MISS_OFFSET 130
 #define TIME_OFFSET 100
 #define statBufferSize 12
+#define MIN_SEC 60
 
 static char hitStr[statBufferSize];
 static char missStr[statBufferSize];
@@ -93,7 +93,7 @@ static void* UpdateLcdThread(void* args) {
     (void) args;
     assert(isInitialized);
     while (isRunning) {
-        UpdateLcd_withScore(getHits(), getMisses());
+        UpdateLcd_withScore(STATS_getHits(), STATS_getMisses());
         sleepForMs(SLEEP_MS);
     }
     return NULL;
@@ -110,13 +110,13 @@ void UpdateLcd_withScore(int hit, int miss)
     sprintf(hitStr, "%d", hit);
     sprintf(missStr, "%d", miss);
 
-    printf("Hit: %s, Miss: %s\n", hitStr, missStr);
+    // printf("Hit: %s, Miss: %s\n", hitStr, missStr);
 
     // Calculate uptime
     time_t currentTime = time(NULL);
     int elapsedSeconds = (int)(currentTime - startTime);
-    int minutes = elapsedSeconds / 60;
-    int seconds = elapsedSeconds % 60;
+    int minutes = elapsedSeconds / MIN_SEC;
+    int seconds = elapsedSeconds % MIN_SEC;
     if (minutes < 0) minutes = 0;
     if (seconds < 0) seconds = 0;
     sprintf(uptimeStr, "%02d:%02d", minutes, seconds);
