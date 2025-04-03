@@ -12,7 +12,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#define MSG_OFFSET 0
+#define MSG_OFFSET 0x6000
 #define MSG_SIZE   32
 #define X_LOCATION_OFFSET (MSG_OFFSET + sizeof(uint32_t))
 #define COLOR_OFFSET (X_LOCATION_OFFSET + sizeof(uint32_t))
